@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">StackSearch</string>
+    <string name="error_message">Error</string>
+</resources>
