@@ -44,12 +44,20 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
 
         viewModel.getNextPage()
+
+        swipe_layout.setOnRefreshListener {
+            questionsAdapter.clearQuestions()
+            viewModel.getFirstPage()
+            progress_bar.visibility = View.VISIBLE
+            rv_questions.visibility = View.GONE
+        }
     }
 
     private fun observeViewModel() {
         viewModel.questionsResponse.observe(this, { items ->
             items?.let {
                 rv_questions.visibility = View.VISIBLE
+                swipe_layout.isRefreshing = false
                 questionsAdapter.addQuestions(it)
             }
         })
@@ -57,8 +65,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.error.observe(this, { errorMessage ->
             tv_error_message.visibility =
                 if (errorMessage == null) View.GONE else View.VISIBLE
-
-            tv_error_message.text = "Error\n$errorMessage"
+            tv_error_message.text = resources.getText(R.string.error_message)
         })
 
         viewModel.loading.observe(this, { isLoading ->

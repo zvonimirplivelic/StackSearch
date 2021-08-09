@@ -21,7 +21,12 @@ class StackQuestionsViewModel : ViewModel() {
         getQuestionsList()
     }
 
-    fun getQuestionsList() {
+    fun getFirstPage() {
+        page = 1
+        getQuestionsList()
+    }
+
+    private fun getQuestionsList() {
         StackSearchService.api.getQuestions(page)
             .enqueue(object : Callback<ResponseList<Question>> {
                 override fun onResponse(

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">StackSearch</string>
-    <string name="error_message">Error</string>
+    <string name="error_message">Error\n %1$s</string>
+    <string name="tv_score_text">Score: %1$s</string>
+    <string name="tv_item_date_text">Date: %1$s</string>
+    <string name="tv_item_owner_name_text">Owner: %1$s</string>
+    <string name="tv_item_answer_count">Number of answers: %1$s</string>
 </resources>
