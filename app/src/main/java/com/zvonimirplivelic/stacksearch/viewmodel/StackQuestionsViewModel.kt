@@ -1,5 +1,6 @@
 package com.zvonimirplivelic.stacksearch.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zvonimirplivelic.stacksearch.model.Question
@@ -9,6 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val TAG = "StackQuestionsViewModel"
 class StackQuestionsViewModel : ViewModel() {
     val questionsResponse = MutableLiveData<List<Question>>()
     val loading = MutableLiveData<Boolean>()
@@ -35,6 +37,7 @@ class StackQuestionsViewModel : ViewModel() {
                 ) {
                     if (response.isSuccessful) {
                         val questionList = response.body()
+                        Log.d(TAG, "questList: $questionList")
                         questionList?.let {
                             questionsResponse.value = questionList.items
                             loading.value = false
@@ -47,6 +50,8 @@ class StackQuestionsViewModel : ViewModel() {
                     onError(t.localizedMessage)
                 }
             })
+
+        Log.d(TAG, "Page: $page")
     }
 
     private fun onError(message: String) {

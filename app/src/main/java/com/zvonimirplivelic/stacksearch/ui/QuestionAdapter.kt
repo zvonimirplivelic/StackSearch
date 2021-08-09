@@ -49,8 +49,12 @@ class QuestionsAdapter(private val questionList: ArrayList<Question>) :
         fun bind(question: Question) {
 
             title.text = convertTitle(question.title)
-            score.text = String.format(resources.getString(R.string.tv_score_text), question.score)
             date.text = getDate(question.creationDate)
+
+            score.text = String.format(
+                resources.getString(R.string.tv_score_text),
+                question.score
+            )
 
             ownerName.text = String.format(
                 resources.getString(R.string.tv_item_owner_name_text),

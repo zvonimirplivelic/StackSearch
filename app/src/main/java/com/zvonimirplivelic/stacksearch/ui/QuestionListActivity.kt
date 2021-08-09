@@ -11,7 +11,7 @@ import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.viewmodel.StackQuestionsViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class QuestionListActivity : AppCompatActivity() {
 
     private val questionsAdapter = QuestionsAdapter(arrayListOf())
     private val viewModel: StackQuestionsViewModel by viewModels()
