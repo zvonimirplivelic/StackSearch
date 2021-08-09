@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ResponseList<T>(
     @SerializedName("items")
-    val items: List<ClipData.Item>
+    val items: List<T>
 )
