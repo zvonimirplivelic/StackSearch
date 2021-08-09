@@ -14,8 +14,15 @@ class StackQuestionsViewModel : ViewModel() {
     val loading = MutableLiveData<Boolean>()
     val error = MutableLiveData<String?>()
 
+    var page = 0
+
+    fun getNextPage() {
+        page++
+        getQuestionsList()
+    }
+
     fun getQuestionsList() {
-        StackSearchService.api.getQuestions(1)
+        StackSearchService.api.getQuestions(page)
             .enqueue(object : Callback<ResponseList<Question>> {
                 override fun onResponse(
                     call: Call<ResponseList<Question>>,
