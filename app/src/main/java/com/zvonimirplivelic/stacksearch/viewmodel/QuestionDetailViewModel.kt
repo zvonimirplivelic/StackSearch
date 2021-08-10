@@ -16,8 +16,8 @@ class QuestionDetailViewModel: ViewModel() {
     val loading = MutableLiveData<Boolean>()
     val error = MutableLiveData<String?>()
 
-    var questionId = 0
-    var page = 0
+    private var questionId = 0
+    private var page = 0
 
     fun getNextPage(questionId: Int?) {
         questionId?.let {

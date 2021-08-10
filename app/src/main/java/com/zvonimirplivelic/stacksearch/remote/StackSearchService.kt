@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object StackSearchService {
-    private val BASE_URL = "https://api.stackexchange.com/"
+    private const val BASE_URL = "https://api.stackexchange.com/"
 
     val api = Retrofit.Builder()
         .baseUrl(BASE_URL)

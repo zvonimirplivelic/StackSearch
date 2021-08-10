@@ -16,7 +16,7 @@ class StackQuestionsViewModel : ViewModel() {
     val loading = MutableLiveData<Boolean>()
     val error = MutableLiveData<String?>()
 
-    var page = 0
+    private var page = 0
 
     fun getNextPage() {
         page++
