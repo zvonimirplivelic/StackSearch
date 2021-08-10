@@ -8,12 +8,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zvonimirplivelic.stacksearch.R
+import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.viewmodel.StackQuestionsViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class QuestionListActivity : AppCompatActivity() {
+class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
 
-    private val questionsAdapter = QuestionsAdapter(arrayListOf())
+    private val questionsAdapter = QuestionsAdapter(arrayListOf(), this)
     private val viewModel: StackQuestionsViewModel by viewModels()
     private val linearLayoutManager = LinearLayoutManager(this)
 
@@ -78,5 +79,9 @@ class QuestionListActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun <T> onListItemClicked(item: T) {
+        startActivity(QuestionDetailActivity.getIntent(this, item as Question))
     }
 }

@@ -1,13 +1,14 @@
 package com.zvonimirplivelic.stacksearch.model
 
 import android.os.Build
-import android.os.Parcel
 import android.os.Parcelable
 import android.text.Html
 import android.text.format.DateFormat
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 data class Question(
     @SerializedName("accepted_answer_id")
     val acceptedAnswerId: Int,
@@ -39,57 +40,7 @@ data class Question(
     val title: String?,
     @SerializedName("view_count")
     val viewCount: Int
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readLong(),
-        parcel.readByte() != 0.toByte(),
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readString(),
-        TODO("owner"),
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.createStringArrayList(),
-        parcel.readString(),
-        parcel.readInt()
-    ) {
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(acceptedAnswerId)
-        parcel.writeString(answerCount)
-        parcel.writeString(contentLicense)
-        parcel.writeLong(creationDate)
-        parcel.writeByte(if (isAnswered) 1 else 0)
-        parcel.writeInt(lastActivityDate)
-        parcel.writeInt(lastEditDate)
-        parcel.writeString(link)
-        parcel.writeInt(protectedDate)
-        parcel.writeInt(questionId)
-        parcel.writeString(score)
-        parcel.writeStringList(tags)
-        parcel.writeString(title)
-        parcel.writeInt(viewCount)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Question> {
-        override fun createFromParcel(parcel: Parcel): Question {
-            return Question(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Question?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+) : Parcelable
 
 fun convertTitle(title: String?) =
     if (Build.VERSION.SDK_INT >= 24) {
