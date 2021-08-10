@@ -41,18 +41,28 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="Date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/rv_answers_detail" />
+        app:layout_constraintBottom_toTopOf="@id/rv_answers_detail"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_answers_detail"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_open_question"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/question_score_detail" />
+
+    <Button
+        android:id="@+id/btn_open_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open question page"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_answers_detail" />
 
     <TextView
         android:id="@+id/tv_error_message_detail"

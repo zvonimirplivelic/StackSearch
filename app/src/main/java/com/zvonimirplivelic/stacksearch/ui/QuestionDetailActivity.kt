@@ -2,6 +2,7 @@ package com.zvonimirplivelic.stacksearch.ui
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,13 +11,14 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zvonimirplivelic.stacksearch.R
+import com.zvonimirplivelic.stacksearch.model.Answer
 import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.model.convertTitle
 import com.zvonimirplivelic.stacksearch.model.getDate
 import com.zvonimirplivelic.stacksearch.viewmodel.QuestionDetailViewModel
 import kotlinx.android.synthetic.main.activity_question_detail.*
 
-class QuestionDetailActivity : AppCompatActivity() {
+class QuestionDetailActivity : AppCompatActivity(), ListItemClickListener {
 
     companion object {
         const val PARAM_QUESTION = "param_question"
@@ -28,7 +30,7 @@ class QuestionDetailActivity : AppCompatActivity() {
 
     var question: Question? = null
     private val viewModel: QuestionDetailViewModel by viewModels()
-    private val answersAdapter = AnswerListAdapter(arrayListOf())
+    private val answersAdapter = AnswerListAdapter(arrayListOf(), this)
     private val lm = LinearLayoutManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +68,12 @@ class QuestionDetailActivity : AppCompatActivity() {
             })
         }
 
+        btn_open_question.setOnClickListener {
+            val uri = "https://stackoverflow.com/questions/${question!!.questionId}"
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            startActivity(browserIntent)
+        }
+
         observeViewModel()
 
         viewModel.getNextPage(question!!.questionId)
@@ -100,5 +108,12 @@ class QuestionDetailActivity : AppCompatActivity() {
         question_title_detail.text = convertTitle(question!!.title)
         question_score_detail.text = question!!.score
         question_date_detail.text = getDate(question!!.creationDate)
+    }
+
+    override fun <T> onListItemClicked(item: T) {
+        val answerId = (item as Answer).answerId
+        val uri = "https://stackoverflow.com/questions/${answerId}"
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        startActivity(browserIntent)
     }
 }

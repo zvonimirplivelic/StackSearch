@@ -1,5 +1,6 @@
 package com.zvonimirplivelic.stacksearch.ui
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,10 @@ import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Answer
 import kotlinx.android.synthetic.main.answer_list_item.view.*
 
-class AnswerListAdapter(private val answerList: ArrayList<Answer>) :
+class AnswerListAdapter(
+    private val answerList: ArrayList<Answer>,
+    private val listener: ListItemClickListener
+) :
     RecyclerView.Adapter<AnswerListAdapter.AnswerAdapterViewHolder>() {
 
     fun addAnswers(newAnswers: List<Answer>) {
@@ -21,7 +25,8 @@ class AnswerListAdapter(private val answerList: ArrayList<Answer>) :
         parent: ViewGroup,
         viewType: Int
     ) = AnswerAdapterViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.answer_list_item, parent, false)
+        LayoutInflater.from(parent.context).inflate(R.layout.answer_list_item, parent, false),
+        listener
     )
 
     override fun onBindViewHolder(holder: AnswerAdapterViewHolder, position: Int) {
@@ -30,11 +35,20 @@ class AnswerListAdapter(private val answerList: ArrayList<Answer>) :
 
     override fun getItemCount(): Int = answerList.size
 
-    class AnswerAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val title = view.item_answer
-
+    class AnswerAdapterViewHolder(view: View, private val listener: ListItemClickListener) :
+        RecyclerView.ViewHolder(view) {
+        private val cardViewAnswer = view.card_view_answer
+        private val answerDescription = view.item_answer
         fun bind(answer: Answer) {
-            title.text = answer.toString()
+
+            if (answer.isAccepted) {
+                cardViewAnswer.setBackgroundColor(Color.GREEN)
+                answerDescription.setTextColor(Color.BLACK)
+            }
+
+            answerDescription.text = answer.toString()
+
+            cardViewAnswer.setOnClickListener { listener.onListItemClicked(answer) }
         }
     }
 }
