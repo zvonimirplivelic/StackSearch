@@ -9,9 +9,12 @@ import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.model.convertTitle
 import com.zvonimirplivelic.stacksearch.model.getDate
-import kotlinx.android.synthetic.main.question_item.view.*
+import kotlinx.android.synthetic.main.question_list_item.view.*
 
-class QuestionsAdapter(private val questionList: ArrayList<Question>) :
+class QuestionsAdapter(
+    private val questionList: ArrayList<Question>,
+    private val listener: ListItemClickListener
+) :
     RecyclerView.Adapter<QuestionsAdapter.QuestionAdapterViewHolder>() {
 
     fun addQuestions(newQuestions: List<Question>) {
@@ -28,7 +31,8 @@ class QuestionsAdapter(private val questionList: ArrayList<Question>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         QuestionAdapterViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.question_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.question_list_item, parent, false),
+            listener
         )
 
     override fun getItemCount() = questionList.size
@@ -37,7 +41,9 @@ class QuestionsAdapter(private val questionList: ArrayList<Question>) :
         holder.bind(questionList[position])
     }
 
-    class QuestionAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class QuestionAdapterViewHolder(view: View, private val listener: ListItemClickListener) :
+        RecyclerView.ViewHolder(view) {
+        private val cardViewQuestion = view.card_view_question
         private val resources: Resources = view.resources
 
         private val title = itemView.tv_item_title
@@ -49,8 +55,12 @@ class QuestionsAdapter(private val questionList: ArrayList<Question>) :
         fun bind(question: Question) {
 
             title.text = convertTitle(question.title)
-            score.text = String.format(resources.getString(R.string.tv_score_text), question.score)
             date.text = getDate(question.creationDate)
+
+            score.text = String.format(
+                resources.getString(R.string.tv_score_text),
+                question.score
+            )
 
             ownerName.text = String.format(
                 resources.getString(R.string.tv_item_owner_name_text),
@@ -61,6 +71,8 @@ class QuestionsAdapter(private val questionList: ArrayList<Question>) :
                 resources.getString(R.string.tv_item_answer_count),
                 question.answerCount
             )
+
+            cardViewQuestion.setOnClickListener { listener.onListItemClicked(question) }
         }
     }
 

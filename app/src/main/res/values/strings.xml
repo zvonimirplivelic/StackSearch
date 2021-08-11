@@ -5,4 +5,5 @@
     <string name="tv_item_date_text">Date: %1$s</string>
     <string name="tv_item_owner_name_text">Owner: %1$s</string>
     <string name="tv_item_answer_count">Number of answers: %1$s</string>
+    <string name="btn_open_question_text">Open question page</string>
 </resources>
