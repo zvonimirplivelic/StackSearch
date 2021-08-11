@@ -1,12 +1,16 @@
-package com.zvonimirplivelic.stacksearch.ui
+package com.zvonimirplivelic.stacksearch.ui.adapter
 
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Answer
+import com.zvonimirplivelic.stacksearch.ui.ListItemClickListener
 import kotlinx.android.synthetic.main.answer_list_item.view.*
 
 class AnswerListAdapter(
@@ -37,12 +41,14 @@ class AnswerListAdapter(
 
     class AnswerAdapterViewHolder(view: View, private val listener: ListItemClickListener) :
         RecyclerView.ViewHolder(view) {
+
+        private val context: Context = view.context
         private val cardViewAnswer = view.card_view_answer
         private val answerDescription = view.item_answer
         fun bind(answer: Answer) {
 
             if (answer.isAccepted) {
-                cardViewAnswer.setBackgroundColor(Color.GREEN)
+                cardViewAnswer.setBackgroundColor(ContextCompat.getColor(context, R.color.stack_orange_dark))
                 answerDescription.setTextColor(Color.BLACK)
             }
 

@@ -15,6 +15,7 @@ import com.zvonimirplivelic.stacksearch.model.Answer
 import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.model.convertTitle
 import com.zvonimirplivelic.stacksearch.model.getDate
+import com.zvonimirplivelic.stacksearch.ui.adapter.AnswerListAdapter
 import com.zvonimirplivelic.stacksearch.viewmodel.QuestionDetailViewModel
 import kotlinx.android.synthetic.main.activity_question_detail.*
 
@@ -106,6 +107,7 @@ class QuestionDetailActivity : AppCompatActivity(), ListItemClickListener {
 
     private fun populateUI() {
         question_title_detail.text = convertTitle(question!!.title)
+        question_owner_detail.text = question!!.owner.displayName
         question_score_detail.text = question!!.score
         question_date_detail.text = getDate(question!!.creationDate)
     }

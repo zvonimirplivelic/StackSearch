@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.viewmodel.StackQuestionsViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_question_list.*
 
 class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
 
@@ -19,7 +19,7 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_question_list)
 
         rv_questions.apply {
             layoutManager = linearLayoutManager
@@ -65,7 +65,7 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
         viewModel.error.observe(this, { errorMessage ->
             tv_error_message.visibility =
                 if (errorMessage == null) View.GONE else View.VISIBLE
-            tv_error_message.text = resources.getText(R.string.error_message)
+            tv_error_message.text = errorMessage
         })
 
         viewModel.loading.observe(this, { isLoading ->
