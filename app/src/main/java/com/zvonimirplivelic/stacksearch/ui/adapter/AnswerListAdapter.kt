@@ -48,7 +48,7 @@ class AnswerListAdapter(
         fun bind(answer: Answer) {
 
             if (answer.isAccepted) {
-                cardViewAnswer.setBackgroundColor(ContextCompat.getColor(context, R.color.stack_orange_dark))
+                cardViewAnswer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.stack_orange_dark))
                 answerDescription.setTextColor(Color.BLACK)
             }
 
