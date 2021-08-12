@@ -1,15 +1,22 @@
 package com.zvonimirplivelic.stacksearch.ui
 
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.viewmodel.StackQuestionsViewModel
 import kotlinx.android.synthetic.main.activity_question_list.*
+import kotlinx.coroutines.*
+
+private const val TAG = "QuestionListActivity"
 
 class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
 
@@ -20,40 +27,25 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question_list)
+        observeViewModel()
 
         rv_questions.apply {
             layoutManager = linearLayoutManager
             adapter = questionsAdapter
-
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dy > 0) {
-                        val childCount = questionsAdapter.itemCount
-                        val lastPosition =
-                            linearLayoutManager.findLastCompletelyVisibleItemPosition()
-
-                        if (childCount - 1 == lastPosition && progress_bar.visibility == View.GONE) {
-                            progress_bar.visibility = View.VISIBLE
-                            viewModel.getNextPage()
-                        }
-                    }
-                }
-            })
         }
 
-        observeViewModel()
-
-        viewModel.getNextPage()
+        viewModel.getStackQuestions()
 
         swipe_layout.setOnRefreshListener {
             questionsAdapter.clearQuestions()
-            viewModel.getFirstPage()
+            viewModel.getStackQuestions()
             progress_bar.visibility = View.VISIBLE
             rv_questions.visibility = View.GONE
         }
     }
 
     private fun observeViewModel() {
+
         viewModel.questionsResponse.observe(this, { items ->
             items?.let {
                 rv_questions.visibility = View.VISIBLE
@@ -83,4 +75,45 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
     override fun <T> onListItemClicked(item: T) {
         startActivity(QuestionDetailActivity.getIntent(this, item as Question))
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+
+        val searchView = menu!!.findItem(R.id.menu_search_bar).actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+            private var searchJob: Job? = null
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchJob?.cancel()
+                searchJob = coroutineScope.launch {
+                    newText?.let {
+                        rv_questions.visibility = View.GONE
+                        progress_bar.visibility = View.VISIBLE
+                        questionsAdapter.clearQuestions()
+
+                        delay(500L)
+
+                        Log.d(TAG, "onQueryTextChange: $newText")
+
+                        if (it.isNullOrEmpty()) {
+                            viewModel.getStackQuestions()
+                        } else {
+                            viewModel.getQueriedStackQuestions(newText)
+                        }
+
+                    }
+                }
+                return false
+            }
+        })
+
+        return true
+    }
 }
+
