@@ -3,9 +3,9 @@
     <color name="stack_black">#222426</color>
     <color name="stack_black_light">#333436</color>
     <color name="stack_grey">#BCBBBB</color>
-    <color name="stack_grey_light">#DCCDDD</color>
+    <color name="stack_grey_light">#CDCDCD</color>
     <color name="stack_orange">#F48024</color>
     <color name="stack_orange_dark">#ED6F0C</color>
     <color name="white">#DDDDDD</color>
-    <color name="black">#191919</color>
+    <color name="black">#141414</color>
     </resources>
