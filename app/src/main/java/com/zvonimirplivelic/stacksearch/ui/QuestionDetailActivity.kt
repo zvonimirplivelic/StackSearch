@@ -62,7 +62,7 @@ class QuestionDetailActivity : AppCompatActivity(), ListItemClickListener {
                         val lastPosition = lm.findLastCompletelyVisibleItemPosition()
                         if (childCount - 1 == lastPosition && progress_bar_detail.visibility == View.GONE) {
                             progress_bar_detail.visibility = View.VISIBLE
-                            viewModel.getNextPage(question!!.questionId)
+                            viewModel.getAnswers(question!!.questionId)
                         }
                     }
                 }
@@ -77,14 +77,14 @@ class QuestionDetailActivity : AppCompatActivity(), ListItemClickListener {
 
         observeViewModel()
 
-        viewModel.getNextPage(question!!.questionId)
+        viewModel.getAnswers(question!!.questionId)
     }
 
     private fun observeViewModel() {
         viewModel.answerListResponse.observe(this, { items ->
             items?.let {
                 rv_answers_detail.visibility = View.VISIBLE
-                answersAdapter.addAnswers(it)
+                answersAdapter.submitAnswerList(it)
             }
         })
 

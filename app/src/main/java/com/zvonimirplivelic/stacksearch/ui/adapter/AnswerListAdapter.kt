@@ -1,20 +1,21 @@
 package com.zvonimirplivelic.stacksearch.ui.adapter
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Answer
+import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.ui.ListItemClickListener
 import kotlinx.android.synthetic.main.answer_list_item.view.*
 
 class AnswerListAdapter(
-    private val answerList: ArrayList<Answer>,
+    private var answerList: List<Answer>,
     private val listener: ListItemClickListener
 ) :
     RecyclerView.Adapter<AnswerListAdapter.AnswerAdapterViewHolder>() {
@@ -33,10 +34,37 @@ class AnswerListAdapter(
 
     override fun getItemCount(): Int = answerList.size
 
-    fun addAnswers(newAnswers: List<Answer>) {
-        val currentLength = answerList.size
-        answerList.addAll(newAnswers)
-        notifyItemInserted(currentLength)
+
+    fun submitAnswerList(newList: List<Answer>) {
+        val oldList = answerList
+        val diffResult: DiffUtil.DiffResult = DiffUtil.calculateDiff(
+            AnswerListDiffCallback(
+                oldList, newList
+            )
+        )
+        answerList = newList as ArrayList<Answer>
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    class AnswerListDiffCallback(
+        var oldList: List<Answer>,
+        var newList: List<Answer>
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].answerId == newList[newItemPosition].answerId
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
     }
 
     class AnswerAdapterViewHolder(view: View, private val listener: ListItemClickListener) :

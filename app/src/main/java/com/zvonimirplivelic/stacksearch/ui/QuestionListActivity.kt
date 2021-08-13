@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Question
+import com.zvonimirplivelic.stacksearch.ui.adapter.QuestionsAdapter
 import com.zvonimirplivelic.stacksearch.viewmodel.StackQuestionsViewModel
 import kotlinx.android.synthetic.main.activity_question_list.*
 import kotlinx.coroutines.*
@@ -48,7 +49,7 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
             items?.let {
                 rv_questions.visibility = View.VISIBLE
                 swipe_layout.isRefreshing = false
-                questionsAdapter.submitList(it)
+                questionsAdapter.submitQuestionList(it)
             }
         })
 
@@ -91,11 +92,10 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
                 searchJob?.cancel()
                 searchJob = coroutineScope.launch {
                     newText?.let {
+                        delay(1000L)
+
                         rv_questions.visibility = View.GONE
                         progress_bar.visibility = View.VISIBLE
-
-                        delay(500L)
-
                         Log.d(TAG, "onQueryTextChange: $newText")
 
                         if (it.isNullOrEmpty()) {

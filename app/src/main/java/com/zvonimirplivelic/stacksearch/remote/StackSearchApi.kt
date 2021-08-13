@@ -21,6 +21,5 @@ interface StackSearchApi {
     @GET("/2.3/questions/{id}/answers?&order=desc&sort=votes&site=stackoverflow")
     fun getAnswers(
         @Path("id") questionId: Int,
-        @Query("page") page: Int
     ): Call<ResponseList<Answer>>
 }

@@ -1,4 +1,4 @@
-package com.zvonimirplivelic.stacksearch.ui
+package com.zvonimirplivelic.stacksearch.ui.adapter
 
 import android.content.res.Resources
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.model.convertTitle
 import com.zvonimirplivelic.stacksearch.model.getDate
+import com.zvonimirplivelic.stacksearch.ui.ListItemClickListener
 import kotlinx.android.synthetic.main.question_list_item.view.*
 
 class QuestionsAdapter(
@@ -29,10 +30,10 @@ class QuestionsAdapter(
         holder.bind(questionList[position])
     }
 
-    fun submitList(newList: List<Question>) {
+    fun submitQuestionList(newList: List<Question>) {
         val oldList = questionList
         val diffResult: DiffUtil.DiffResult = DiffUtil.calculateDiff(
-            QuestionDiffCallback(
+            QuestionListDiffCallback(
                 oldList, newList
             )
         )
@@ -40,7 +41,7 @@ class QuestionsAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    class QuestionDiffCallback(
+    class QuestionListDiffCallback(
         var oldList: List<Question>,
         var newList: List<Question>
     ) : DiffUtil.Callback() {

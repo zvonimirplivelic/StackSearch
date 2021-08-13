@@ -11,43 +11,37 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val TAG = "QuestionDetailViewModel"
-class QuestionDetailViewModel: ViewModel() {
+class QuestionDetailViewModel : ViewModel() {
     val answerListResponse = MutableLiveData<List<Answer>>()
     val loading = MutableLiveData<Boolean>()
     val error = MutableLiveData<String?>()
 
     private var questionId = 0
-    private var page = 0
 
-    fun getNextPage(questionId: Int?) {
-        questionId?.let {
-            this.questionId = it
-            page++
-            getAnswers()
-        }
-    }
+    fun getAnswers(questionId: Int?) {
+        questionId.let { questionId ->
 
-    private fun getAnswers() {
-        StackSearchService.api.getAnswers(questionId, page)
-            .enqueue(object: Callback<ResponseList<Answer>> {
-                override fun onResponse(
-                    call: Call<ResponseList<Answer>>,
-                    response: Response<ResponseList<Answer>>
-                ) {
-                    val answers = response.body()
-                    Log.d(TAG, "onResponse: $answers")
-                    answers?.let {
-                        answerListResponse.value = it.items
-                        loading.value = false
-                        error.value = null
+            this.questionId = questionId!!
+            StackSearchService.api.getAnswers(questionId)
+                .enqueue(object : Callback<ResponseList<Answer>> {
+                    override fun onResponse(
+                        call: Call<ResponseList<Answer>>,
+                        response: Response<ResponseList<Answer>>
+                    ) {
+                        val answers = response.body()
+                        Log.d(TAG, "onResponse: $answers")
+                        answers?.let {
+                            answerListResponse.value = it.items
+                            loading.value = false
+                            error.value = null
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<ResponseList<Answer>>, t: Throwable) {
-                    onError(t.localizedMessage)
-                }
-
-            })
+                    override fun onFailure(call: Call<ResponseList<Answer>>, t: Throwable) {
+                        onError(t.localizedMessage)
+                    }
+                })
+        }
     }
 
     private fun onError(message: String) {
