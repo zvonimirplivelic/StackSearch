@@ -19,12 +19,6 @@ class AnswerListAdapter(
 ) :
     RecyclerView.Adapter<AnswerListAdapter.AnswerAdapterViewHolder>() {
 
-    fun addAnswers(newAnswers: List<Answer>) {
-        val currentLength = answerList.size
-        answerList.addAll(newAnswers)
-        notifyItemInserted(currentLength)
-    }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -39,12 +33,19 @@ class AnswerListAdapter(
 
     override fun getItemCount(): Int = answerList.size
 
+    fun addAnswers(newAnswers: List<Answer>) {
+        val currentLength = answerList.size
+        answerList.addAll(newAnswers)
+        notifyItemInserted(currentLength)
+    }
+
     class AnswerAdapterViewHolder(view: View, private val listener: ListItemClickListener) :
         RecyclerView.ViewHolder(view) {
 
         private val context: Context = view.context
         private val cardViewAnswer = view.card_view_answer
         private val answerDescription = view.item_answer
+
         fun bind(answer: Answer) {
 
             if (answer.isAccepted) {

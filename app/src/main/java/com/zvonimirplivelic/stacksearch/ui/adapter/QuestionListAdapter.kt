@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Question
@@ -12,22 +13,9 @@ import com.zvonimirplivelic.stacksearch.model.getDate
 import kotlinx.android.synthetic.main.question_list_item.view.*
 
 class QuestionsAdapter(
-    private val questionList: ArrayList<Question>,
+    private var questionList: List<Question>,
     private val listener: ListItemClickListener
-) :
-    RecyclerView.Adapter<QuestionsAdapter.QuestionAdapterViewHolder>() {
-
-    fun addQuestions(newQuestions: List<Question>) {
-        val currentLength = questionList.size
-        questionList.addAll(newQuestions)
-        notifyItemInserted(currentLength)
-    }
-
-    fun clearQuestions() {
-        questionList.clear()
-        notifyDataSetChanged()
-    }
-
+) : RecyclerView.Adapter<QuestionsAdapter.QuestionAdapterViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         QuestionAdapterViewHolder(
@@ -39,6 +27,38 @@ class QuestionsAdapter(
 
     override fun onBindViewHolder(holder: QuestionAdapterViewHolder, position: Int) {
         holder.bind(questionList[position])
+    }
+
+    fun submitList(newList: List<Question>) {
+        val oldList = questionList
+        val diffResult: DiffUtil.DiffResult = DiffUtil.calculateDiff(
+            QuestionDiffCallback(
+                oldList, newList
+            )
+        )
+        questionList = newList as ArrayList<Question>
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    class QuestionDiffCallback(
+        var oldList: List<Question>,
+        var newList: List<Question>
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].questionId == newList[newItemPosition].questionId
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
     }
 
     class QuestionAdapterViewHolder(view: View, private val listener: ListItemClickListener) :
@@ -75,5 +95,4 @@ class QuestionsAdapter(
             cardViewQuestion.setOnClickListener { listener.onListItemClicked(question) }
         }
     }
-
 }

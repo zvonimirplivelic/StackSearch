@@ -9,7 +9,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.zvonimirplivelic.stacksearch.R
 import com.zvonimirplivelic.stacksearch.model.Question
 import com.zvonimirplivelic.stacksearch.viewmodel.StackQuestionsViewModel
@@ -37,7 +36,6 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
         viewModel.getStackQuestions()
 
         swipe_layout.setOnRefreshListener {
-            questionsAdapter.clearQuestions()
             viewModel.getStackQuestions()
             progress_bar.visibility = View.VISIBLE
             rv_questions.visibility = View.GONE
@@ -50,7 +48,7 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
             items?.let {
                 rv_questions.visibility = View.VISIBLE
                 swipe_layout.isRefreshing = false
-                questionsAdapter.addQuestions(it)
+                questionsAdapter.submitList(it)
             }
         })
 
@@ -95,7 +93,6 @@ class QuestionListActivity : AppCompatActivity(), ListItemClickListener {
                     newText?.let {
                         rv_questions.visibility = View.GONE
                         progress_bar.visibility = View.VISIBLE
-                        questionsAdapter.clearQuestions()
 
                         delay(500L)
 

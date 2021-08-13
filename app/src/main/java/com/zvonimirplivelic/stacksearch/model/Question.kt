@@ -43,11 +43,7 @@ data class Question(
 ) : Parcelable
 
 fun convertTitle(title: String?) =
-    if (Build.VERSION.SDK_INT >= 24) {
-        Html.fromHtml(title, Html.FROM_HTML_MODE_LEGACY).toString()
-    } else {
-        Html.fromHtml(title).toString()
-    }
+    Html.fromHtml(title, Html.FROM_HTML_MODE_LEGACY).toString()
 
 fun getDate(timestamp: Long?): String {
     var time = ""
@@ -58,4 +54,7 @@ fun getDate(timestamp: Long?): String {
     }
     return time
 }
+
+
+
 
